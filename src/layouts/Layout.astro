@@ -1,5 +1,7 @@
 ---
 import "../styles/global.css";
+import { getImage } from "astro:assets";
+import karlaPhoto from "../assets/images/karla-professional-photo.png";
 
 interface Props {
 	title: string;
@@ -8,17 +10,20 @@ interface Props {
 
 const { title, description } = Astro.props;
 
+const profileImage = await getImage({ src: karlaPhoto, format: "webp", width: 600 });
+
 const jsonLd = {
 	"@context": "https://schema.org",
 	"@type": "Attorney",
 	name: "Karla Mendoza García",
 	honorificPrefix: "Lic.",
 	jobTitle: "Abogado y Notario Público",
+	image: new URL(profileImage.src, Astro.site).href,
 	email: "karlamendoza1970@gmail.com",
 	telephone: "+505-8732-8420",
 	address: {
 		"@type": "PostalAddress",
-		streetAddress: "Iglesia San José, 3 c. al norte",
+		streetAddress: "Iglesia San José, 3 c. al Norte",
 		addressLocality: "León",
 		addressCountry: "NI",
 	},

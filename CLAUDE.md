@@ -50,13 +50,15 @@ When changing font weights, update the Google Fonts URL and the element together
 
 ```
 src/
-  layouts/Layout.astro   — <head>: title/meta, JSON-LD (schema.org Attorney), fonts,
-                            favicon, skip-link; global scroll-reveal IntersectionObserver
+  layouts/Layout.astro   — <head>: title/meta, JSON-LD (schema.org Attorney, includes
+                            her portrait as `image`), fonts, favicon, skip-link;
+                            global scroll-reveal IntersectionObserver
   components/
     Nav.astro              — sticky nav, KMG monogram, hamburger toggle (md: breakpoint)
     Hero.astro              — full-bleed background photo (src/assets/images/lady-justice-hero.webp,
                                via astro:assets <Image>) with gradient scrim, name/title/chips/CTA
-    About.astro               — "Perfil Profesional" section: bio copy + timeline
+    About.astro               — "Perfil Profesional" section: portrait (karla-professional-photo.png)
+                                 + heading/intro in a two-col layout up top, then bio copy + timeline
     WorkingStyle.astro          — "Su forma de trabajar con los clientes"
     Credentials.astro            — "Formación y credenciales": info list + <NotarialSeal />
     NotarialSeal.astro            — original circular seal SVG (not a real government
@@ -68,10 +70,28 @@ src/
     Footer.astro                     — credential line + dynamically-computed copyright year
   pages/index.astro                  — assembles Layout + all sections in order
   styles/global.css                  — Tailwind entry + @theme (colors, fonts) + a11y/motion CSS
+  assets/images/                     — lady-justice-hero.webp (Hero bg), karla-professional-photo.png
+                                        (Perfil Profesional portrait) — both go through astro:assets,
+                                        never reference these as plain public/ files
 ```
 
 One component per section — keep it that way when adding sections rather than growing
 `index.astro` into a monolith.
+
+## Images
+
+Both photos are imported as ESM modules and rendered via `astro:assets`' `<Image>`
+(Hero, About), which handles optimization/responsive `widths` automatically. Keep
+filenames free of spaces — an image was originally uploaded as `KarlaMG Professional
+Picture 1.png`; renamed to `karla-professional-photo.png` before importing, since
+spaces in import specifiers are fragile.
+
+If an asset needs to appear in `Layout.astro`'s JSON-LD (e.g. the `image` field on the
+Attorney schema), don't hand-write a path — import the asset there too and resolve it
+with `getImage()` + `new URL(result.src, Astro.site)` to get a correct absolute URL
+that already has the GitHub Pages `base` folded in (see the `profileImage` const in
+`Layout.astro`). Don't reuse a relative path string; `getImage()` is what accounts for
+the hashed output filename and the `base` prefix correctly.
 
 ## Content notes
 
@@ -84,6 +104,16 @@ One component per section — keep it that way when adding sections rather than 
   they're confirmed.
 - "Perfil Profesional" (formerly "Sobre mí") is the section id `#perfil-profesional` —
   keep the nav label, `<h2>`, and anchor id in sync if it's renamed again.
+- Address is written **"Iglesia San José, 3 c. al Norte"** — capital N on "Norte". It
+  appears in both `Contact.astro` and the JSON-LD `streetAddress` in `Layout.astro`;
+  keep them in sync.
+- The Contact section's Correo/Teléfono/Ubicación values are `text-lg`, not `text-xl`
+  — they were sized down specifically so `karlamendoza1970@gmail.com` fits on one
+  line. That column's width is capped by the section's `max-w-4xl` container
+  regardless of viewport, so this wraps at *every* desktop width, not just narrow
+  ones, if the font size goes back up. There's also a `<wbr />` before `.com` in the
+  email markup as a safety net so if it ever does wrap, it breaks at a sensible point
+  instead of mid-word — don't reintroduce `break-all`, which is what caused that.
 
 ## Known environment gotchas (from building/testing this repo)
 
@@ -104,6 +134,16 @@ One component per section — keep it that way when adding sections rather than 
   link (`min-w-0` + `truncate` on the name span) and Hero's content wrapper (plain block,
   not `flex flex-col`, since it didn't need flex at all) both hit this; watch for it
   in any new flex row that has to work down to ~360px wide.
+- **`npm run dev` can hang and fail with `"Dev server failed to start within 30s."`**
+  after `node_modules` churn (e.g. installing/removing the temporary `playwright`
+  dependency mentioned above). Fix: `rm -rf node_modules/.vite node_modules/.astro` and retry —
+  a stale dependency-optimization cache was the cause both times this happened. Try
+  this first before assuming something is actually broken.
+- Don't try to debug a stuck dev server by killing `chrome`/`msedge` processes you
+  find running — on this machine those are as likely to be the user's real browser
+  session as anything automation-related, and Playwright's own bundled Chromium lives
+  in `%LOCALAPPDATA%\ms-playwright`, not `Program Files`. Check `Get-Process ... |
+  Select Path` before assuming a process is yours to touch.
 
 ## Development
 
