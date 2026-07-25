@@ -124,6 +124,11 @@ the hashed output filename and the `base` prefix correctly.
   ones, if the font size goes back up. There's also a `<wbr />` before `.com` in the
   email markup as a safety net so if it ever does wrap, it breaks at a sensible point
   instead of mid-word — don't reintroduce `break-all`, which is what caused that.
+- The original brief called for Contact's intro paragraph to note that her email is
+  "la misma dirección que utilizan los juzgados para contactarme de forma oficial" —
+  that sentence was removed at the client's request. Current copy is just "Si necesita
+  asesoría legal o desea agendar una consulta, escríbame directamente al correo."
+  Don't re-add the courts-contact-her-here framing without checking with the client.
 - `Footer.astro` has a "Sitio web por Halliday" credit line linking to
   `https://hallidayinc.com/` (`target="_blank" rel="noopener noreferrer"` — it's an
   external site, keep that so it opens in a new tab rather than navigating away from
