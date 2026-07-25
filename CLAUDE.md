@@ -121,14 +121,15 @@ the hashed output filename and the `base` prefix correctly.
 
 ## Content notes
 
-- The copy in `Hero.astro`, `About.astro`, and `WorkingStyle.astro` has been revised
-  several times as the client refines her wording (headings, the eyebrow line, chip
-  text, pull-quotes, and paragraph text have all changed at least once — e.g. the
-  Hero `<h1>` has flipped between "Lic. Karla Mendoza García" and "Licenciada Karla
-  Mendoza García" more than once). This file doesn't track exact prose — read the
-  component directly for current copy; treat anything quoted below as either a
-  structural fact (an id, a class, a number) or an explicit "don't reintroduce X"
-  note, not a snapshot of the marketing copy.
+- The copy in `Hero.astro`, `About.astro`, `WorkingStyle.astro`, and the WhatsApp
+  prefilled message in `lib/whatsapp.ts` has been revised several times as the client
+  refines her wording (headings, the eyebrow line, chip text, pull-quotes, paragraph
+  text, and the WhatsApp message have all changed at least once — e.g. the Hero `<h1>`
+  has flipped between "Lic. Karla Mendoza García" and "Licenciada Karla Mendoza
+  García" more than once). This file doesn't track exact prose — read the component
+  directly for current copy; treat anything quoted below as either a structural fact
+  (an id, a class, a number) or an explicit "don't reintroduce X" note, not a
+  snapshot of the marketing copy.
 - Client-provided facts (name, dates, carné number, email, phone, address) should be
   treated as exact — don't rephrase numbers/dates. Carné is always written
   **"Carné CSJ No. 14680"** (not just "Carné No. ...").
