@@ -63,7 +63,7 @@ src/
                                via astro:assets <Image>) with gradient scrim, name/title/chips/CTA
     About.astro               — "Perfil Profesional" section: portrait (karla-professional-photo.png)
                                  + heading/intro in a two-col layout up top, then bio copy + timeline
-    WorkingStyle.astro          — "Su forma de trabajar con los clientes"
+    WorkingStyle.astro          — "Su compromiso con cada cliente"
     Credentials.astro            — "Formación y credenciales": single-column info list
                                     (Formación académica / Afiliación profesional / Credencial
                                     oficial) — no graphic, see Content notes below
@@ -99,6 +99,12 @@ the hashed output filename and the `base` prefix correctly.
 
 ## Content notes
 
+- The bio copy in `About.astro` and `WorkingStyle.astro` has been revised several
+  times as the client refines her wording (headings, pull-quotes, and paragraph text
+  have all changed at least once). This file doesn't track exact prose — read the
+  component directly for current copy; treat anything quoted below as either a
+  structural fact (an id, a class, a number) or an explicit "don't reintroduce X"
+  note, not a snapshot of the marketing copy.
 - Client-provided facts (name, dates, carné number, email, phone, address) should be
   treated as exact — don't rephrase numbers/dates. Carné is always written
   **"Carné CSJ No. 14680"** (not just "Carné No. ...").
