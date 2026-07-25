@@ -1,0 +1,122 @@
+---
+const links = [
+	{ href: "#perfil-profesional", label: "Perfil Profesional" },
+	{ href: "#credenciales", label: "Credenciales" },
+	{ href: "#areas-de-practica", label: "Áreas de práctica" },
+	{ href: "#contacto", label: "Contacto" },
+];
+---
+
+<header class="sticky top-0 z-40 border-b border-ink-soft/30 bg-ink text-cream">
+	<nav
+		class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6"
+		aria-label="Navegación principal"
+	>
+		<a href="#top" class="flex min-w-0 items-center gap-3 font-serif">
+			<span
+				class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-brass text-sm font-semibold tracking-wide text-brass"
+				aria-hidden="true"
+			>
+				KMG
+			</span>
+			<span class="truncate text-base leading-tight sm:text-lg">Karla Mendoza García</span>
+		</a>
+
+		<ul class="hidden items-center gap-8 font-sans text-sm md:flex">
+			{
+				links.map((link) => (
+					<li>
+						<a
+							href={link.href}
+							class="rounded-sm py-1 text-cream/90 transition-colors hover:text-brass"
+						>
+							{link.label}
+						</a>
+					</li>
+				))
+			}
+		</ul>
+
+		<button
+			id="nav-toggle"
+			type="button"
+			class="rounded-sm p-2 text-cream md:hidden"
+			aria-expanded="false"
+			aria-controls="nav-mobile-menu"
+		>
+			<span class="sr-only">Abrir menú de navegación</span>
+			<svg
+				id="nav-icon-open"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				class="h-6 w-6"
+				aria-hidden="true"
+			>
+				<path d="M4 7h16M4 12h16M4 17h16" />
+			</svg>
+			<svg
+				id="nav-icon-close"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				class="hidden h-6 w-6"
+				aria-hidden="true"
+			>
+				<path d="M6 6l12 12M18 6L6 18" />
+			</svg>
+		</button>
+	</nav>
+
+	<ul
+		id="nav-mobile-menu"
+		class="hidden flex-col gap-1 border-t border-ink-soft/30 bg-ink px-4 pb-4 pt-2 font-sans text-sm md:hidden"
+	>
+		{
+			links.map((link) => (
+				<li>
+					<a
+						href={link.href}
+						class="block rounded-sm px-2 py-3 text-cream/90 transition-colors hover:text-brass"
+					>
+						{link.label}
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</header>
+
+<script>
+	const toggle = document.getElementById("nav-toggle");
+	const menu = document.getElementById("nav-mobile-menu");
+	const iconOpen = document.getElementById("nav-icon-open");
+	const iconClose = document.getElementById("nav-icon-close");
+
+	if (toggle && menu && iconOpen && iconClose) {
+		toggle.addEventListener("click", () => {
+			const isOpen = toggle.getAttribute("aria-expanded") === "true";
+			toggle.setAttribute("aria-expanded", String(!isOpen));
+			menu.classList.toggle("hidden", isOpen);
+			menu.classList.toggle("flex", !isOpen);
+			iconOpen.classList.toggle("hidden", !isOpen);
+			iconClose.classList.toggle("hidden", isOpen);
+		});
+
+		menu.querySelectorAll("a").forEach((link) => {
+			link.addEventListener("click", () => {
+				toggle.setAttribute("aria-expanded", "false");
+				menu.classList.add("hidden");
+				menu.classList.remove("flex");
+				iconOpen.classList.remove("hidden");
+				iconClose.classList.add("hidden");
+			});
+		});
+	}
+</script>

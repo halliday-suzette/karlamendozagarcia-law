@@ -1,0 +1,77 @@
+---
+const timeline = [
+	{
+		date: "2003",
+		title: "Graduación UNAN-León",
+		description:
+			"Se gradúa como Licenciada en Derecho en la Facultad de Ciencias Jurídicas y Sociales de la UNAN-León.",
+	},
+	{
+		date: "Inicios",
+		title: "Aprendiendo del oficio",
+		description:
+			"Trabaja sin remuneración apoyando a otros abogados, varios de ellos hoy jueces, solo por la experiencia y el aprendizaje práctico.",
+	},
+	{
+		date: "Hoy",
+		title: "23 años de trayectoria",
+		description:
+			"Ejerce con trayectoria propia en León y acompaña a los nuevos profesionales del derecho que apenas están empezando.",
+	},
+];
+---
+
+<section id="perfil-profesional" class="scroll-mt-20 bg-paper px-4 py-20 sm:px-6 sm:py-28">
+	<div class="mx-auto max-w-4xl" data-reveal>
+		<h2 class="font-serif text-3xl text-ink sm:text-4xl">Perfil Profesional</h2>
+
+		<div class="mt-8 space-y-5 text-base leading-relaxed text-ink-soft sm:text-lg">
+			<p>
+				Con 23 años de trayectoria profesional desde su graduación en 2003, Lic. Karla
+				Mendoza García ha construido su carrera sobre una base de disciplina, servicio y
+				comunicación clara con sus clientes.
+			</p>
+
+			<h3 class="pt-2 font-serif text-xl text-ink sm:text-2xl">
+				Una vocación que nació sirviendo a otros
+			</h3>
+			<p>
+				Mientras cursaba sus estudios de Derecho, Karla trabajaba ofreciendo contratos de
+				servicios funerarios a nivel nacional. Fue en ese trabajo donde descubrió una
+				habilidad natural: la facilidad para comunicarse con las personas, incluso en los
+				momentos más difíciles. Esa experiencia marcó el rumbo de su vocación profesional
+				y sigue siendo, hasta hoy, parte de su identidad como abogada.
+			</p>
+
+			<blockquote
+				class="border-l-4 border-brass bg-paper-deep px-6 py-5 font-serif text-xl font-medium italic text-ink sm:text-2xl"
+			>
+				"Eso me dio la pauta de tener facilidad de comunicación."
+			</blockquote>
+
+			<h3 class="pt-2 font-serif text-xl text-ink sm:text-2xl">Empezando desde cero</h3>
+			<p>
+				Karla inició su carrera legal sin remuneración, colaborando con otros abogados
+				—muchos de los cuales hoy son jueces— con el único objetivo de aprender y ganar
+				experiencia práctica. Esa etapa de sacrificio y aprendizaje la marcó
+				profundamente, y hoy la impulsa a apoyar a los nuevos profesionales del derecho
+				que están comenzando su camino, tal como ella lo hizo alguna vez.
+			</p>
+		</div>
+
+		<ol class="mt-12 space-y-8 border-l border-brass/40 pl-6 sm:pl-8">
+			{
+				timeline.map((item) => (
+					<li class="relative">
+						<span class="absolute -left-[1.95rem] top-1 h-3 w-3 rounded-full border-2 border-brass bg-paper sm:-left-[2.45rem]" />
+						<p class="font-mono text-xs uppercase tracking-wider text-brass-deep">
+							{item.date}
+						</p>
+						<p class="mt-1 font-serif text-lg text-ink">{item.title}</p>
+						<p class="mt-1 text-sm text-ink-soft sm:text-base">{item.description}</p>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</section>

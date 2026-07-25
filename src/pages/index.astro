@@ -1,0 +1,27 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
+import About from "../components/About.astro";
+import WorkingStyle from "../components/WorkingStyle.astro";
+import Credentials from "../components/Credentials.astro";
+import Practice from "../components/Practice.astro";
+import Contact from "../components/Contact.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout
+	title="Lic. Karla Mendoza García — Abogado y Notario Público en León, Nicaragua | 23 años de trayectoria"
+	description="Lic. Karla Mendoza García es Abogado y Notario Público en León, Nicaragua, con 23 años de trayectoria y Carné CSJ No. 14680 ante la Corte Suprema de Justicia."
+>
+	<Nav />
+	<main id="contenido">
+		<Hero />
+		<About />
+		<WorkingStyle />
+		<Credentials />
+		<Practice />
+		<Contact />
+	</main>
+	<Footer />
+</Layout>

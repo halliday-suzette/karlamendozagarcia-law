@@ -1,0 +1,60 @@
+---
+import { Image } from "astro:assets";
+import ladyJusticeHero from "../assets/images/lady-justice-hero.webp";
+
+const chips = [
+	"23 años de trayectoria",
+	"Licenciada en Derecho — UNAN-León, 2003",
+	"Carné CSJ No. 14680",
+];
+---
+
+<section id="top" class="relative overflow-hidden bg-ink text-cream">
+	<div class="absolute inset-0" aria-hidden="true">
+		<Image
+			src={ladyJusticeHero}
+			alt=""
+			loading="eager"
+			fetchpriority="high"
+			class="h-full w-full object-cover object-[70%_15%]"
+		/>
+		<div
+			class="absolute inset-0 bg-gradient-to-r from-ink from-15% via-ink/60 via-45% to-transparent"
+		>
+		</div>
+		<div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-ink/30">
+		</div>
+	</div>
+
+	<div class="relative mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
+		<p class="font-mono text-xs uppercase tracking-[0.25em] text-brass">
+			República de Nicaragua
+		</p>
+
+		<h1 class="mt-6 font-serif text-4xl leading-tight sm:text-5xl md:text-6xl">
+			Lic. Karla Mendoza García
+		</h1>
+
+		<p class="mt-4 font-serif text-xl text-cream/90 sm:text-2xl">
+			Abogado y Notario Público
+		</p>
+		<p class="mt-1 text-sm text-cream/70">León, Nicaragua</p>
+
+		<ul class="mt-8 flex flex-wrap gap-3">
+			{
+				chips.map((chip) => (
+					<li class="rounded-full border border-brass/60 bg-ink-soft/40 px-4 py-1.5 font-mono text-xs text-cream/90">
+						{chip}
+					</li>
+				))
+			}
+		</ul>
+
+		<a
+			href="#contacto"
+			class="mt-10 inline-flex items-center gap-2 rounded-sm bg-brass px-6 py-3 font-sans text-sm font-semibold text-ink transition-colors hover:bg-brass-deep hover:text-cream"
+		>
+			Solicitar una consulta →
+		</a>
+	</div>
+</section>

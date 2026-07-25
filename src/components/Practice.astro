@@ -1,0 +1,58 @@
+---
+// NOTE: These practice areas are reasonable placeholders and are pending
+// confirmation from the client before this site is published.
+const areas = [
+	{
+		title: "Trámites notariales",
+		description:
+			"Escrituras, autenticaciones y demás diligencias que requieren la fe pública de un notario.",
+	},
+	{
+		title: "Derecho civil y de familia",
+		description:
+			"Asesoría en asuntos civiles y de familia, con un trato cercano y claro en cada etapa del proceso.",
+	},
+	{
+		title: "Contratos",
+		description:
+			"Elaboración y revisión de contratos, cuidando que cada cláusula sea clara y proteja sus intereses.",
+	},
+	{
+		title: "Bienes raíces",
+		description:
+			"Acompañamiento legal en compraventas, traspasos y demás gestiones relacionadas con propiedades.",
+	},
+	{
+		title: "Poderes y representación",
+		description:
+			"Otorgamiento de poderes generales y especiales para trámites dentro y fuera de Nicaragua.",
+	},
+	{
+		title: "Asesoría legal general",
+		description:
+			"Orientación jurídica clara para tomar decisiones informadas frente a cualquier situación legal.",
+	},
+];
+---
+
+<section
+	id="areas-de-practica"
+	class="scroll-mt-20 bg-paper-deep px-4 py-20 sm:px-6 sm:py-28"
+>
+	<div class="mx-auto max-w-6xl" data-reveal>
+		<h2 class="font-serif text-3xl text-ink sm:text-4xl">Áreas de práctica</h2>
+
+		<ul class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+			{
+				areas.map((area) => (
+					<li class="rounded-sm border border-ink-soft/15 bg-paper p-6">
+						<h3 class="font-serif text-lg text-ink">{area.title}</h3>
+						<p class="mt-2 text-sm leading-relaxed text-ink-soft">
+							{area.description}
+						</p>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
