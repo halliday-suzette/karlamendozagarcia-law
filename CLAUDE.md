@@ -71,6 +71,7 @@ src/
                                       flagged in-code, pending client confirmation
     Contact.astro                   — email/phone/address, dark section matching Hero
     Footer.astro                     — credential line + dynamically-computed copyright year
+                                        + "Sitio web por Halliday" credit link
   pages/index.astro                  — assembles Layout + all sections in order
   styles/global.css                  — Tailwind entry + @theme (colors, fonts) + a11y/motion CSS
   assets/images/                     — lady-justice-hero.webp (Hero bg), karla-professional-photo.png
@@ -123,6 +124,13 @@ the hashed output filename and the `base` prefix correctly.
   ones, if the font size goes back up. There's also a `<wbr />` before `.com` in the
   email markup as a safety net so if it ever does wrap, it breaks at a sensible point
   instead of mid-word — don't reintroduce `break-all`, which is what caused that.
+- `Footer.astro` has a "Sitio web por Halliday" credit line linking to
+  `https://hallidayinc.com/` (`target="_blank" rel="noopener noreferrer"` — it's an
+  external site, keep that so it opens in a new tab rather than navigating away from
+  Karla's page). If you touch that line, watch out for whitespace collapsing between
+  the "por" text node and the `<a>` on the next line — that's why it's written as
+  `Sitio web por{" "}` rather than a plain trailing space; without the explicit `{" "}`
+  Astro drops the space and it renders as "porHalliday".
 
 ## Known environment gotchas (from building/testing this repo)
 
