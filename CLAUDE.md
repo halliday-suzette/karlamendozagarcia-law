@@ -45,6 +45,10 @@ using one of these families, the weight must already be in that URL string in
 `Layout.astro`, or the browser silently substitutes the nearest loaded weight instead
 of the one you asked for — it doesn't error, it just quietly renders slightly wrong.
 When changing font weights, update the Google Fonts URL and the element together.
+(IBM Plex Mono 600 was added specifically for the seal graphic's carné number; since
+that graphic was removed — see Content notes — nothing currently uses weight 600 on
+`font-mono`. Harmless to leave in the URL, fine to trim if you're touching that line
+anyway.)
 
 ## Structure
 
@@ -60,10 +64,9 @@ src/
     About.astro               — "Perfil Profesional" section: portrait (karla-professional-photo.png)
                                  + heading/intro in a two-col layout up top, then bio copy + timeline
     WorkingStyle.astro          — "Su forma de trabajar con los clientes"
-    Credentials.astro            — "Formación y credenciales": info list + <NotarialSeal />
-    NotarialSeal.astro            — original circular seal SVG (not a real government
-                                     emblem); ring text is placed char-by-char via computed
-                                     trig in the frontmatter, not <textPath> — see comments
+    Credentials.astro            — "Formación y credenciales": single-column info list
+                                    (Formación académica / Afiliación profesional / Credencial
+                                    oficial) — no graphic, see Content notes below
     Practice.astro                 — "Áreas de práctica" grid; areas are PLACEHOLDERS,
                                       flagged in-code, pending client confirmation
     Contact.astro                   — email/phone/address, dark section matching Hero
@@ -97,8 +100,14 @@ the hashed output filename and the `base` prefix correctly.
 
 - Client-provided facts (name, dates, carné number, email, phone, address) should be
   treated as exact — don't rephrase numbers/dates. Carné is always written
-  **"Carné CSJ No. 14680"** (not just "Carné No. ...") to stay consistent with the seal
-  graphic.
+  **"Carné CSJ No. 14680"** (not just "Carné No. ...").
+- **There used to be an original circular "notarial seal" SVG** (ring text, scales
+  icon, `NotarialSeal.astro`) in the Credentials section. It was removed at the
+  client's request — she flagged that a circular graphic reading "CORTE SUPREMA DE
+  JUSTICIA / REPÚBLICA DE NICARAGUA" could be mistaken for a real government seal,
+  which it wasn't meant to imply. Don't re-add a seal/stamp-style graphic evoking an
+  official emblem without checking with the client first; the carné number is
+  conveyed as plain text in the "Credencial oficial" list item instead.
 - The six practice areas in `Practice.astro` are placeholders pending the client's
   sign-off — there's an in-code comment flagging this; don't remove the comment until
   they're confirmed.
