@@ -67,6 +67,9 @@ src/
     Credentials.astro            — "Formación y credenciales": single-column info list
                                     (Formación académica / Afiliación profesional / Credencial
                                     oficial) — no graphic, see Content notes below
+    InternationalClients.astro    — "¿Se encuentra fuera de Nicaragua?": 2 intro
+                                     paragraphs + 2-col brass-bullet checklist + closing
+                                     paragraph with an inline #contacto link ("escríbame")
     Practice.astro                 — "Áreas de práctica" grid; areas are PLACEHOLDERS,
                                       flagged in-code, pending client confirmation
     Contact.astro                   — email/phone/address, dark section matching Hero
@@ -81,6 +84,18 @@ src/
 
 One component per section — keep it that way when adding sections rather than growing
 `index.astro` into a monolith.
+
+Section order in `index.astro`: `Hero → About → WorkingStyle → Credentials →
+InternationalClients → Practice → Contact`. Sections strictly alternate `bg-paper` /
+`bg-paper-deep` backgrounds for visual separation (Hero and Contact are the `bg-ink`
+bookends). If you insert a section, either background works, but you'll need to flip
+every section after it to keep the alternation — that's what happened when
+`InternationalClients` was inserted before `Practice`: `Practice.astro` flipped from
+`bg-paper-deep` to `bg-paper`, which *also* required flipping its cards from `bg-paper`
+to `bg-paper-deep` (cards need the opposite tone from their section to read as cards
+at all — same reason `WorkingStyle`'s blockquote is `bg-paper` against the section's
+`bg-paper-deep`). Check every `bg-paper`/`bg-paper-deep` in a section you're touching,
+not just the `<section>` tag's own class.
 
 ## Images
 
@@ -172,6 +187,13 @@ the hashed output filename and the `base` prefix correctly.
   session as anything automation-related, and Playwright's own bundled Chromium lives
   in `%LOCALAPPDATA%\ms-playwright`, not `Program Files`. Check `Get-Process ... |
   Select Path` before assuming a process is yours to touch.
+- Separately from the cache issue above: `npm run dev` can also print `"Dev server
+  already running at http://localhost:4321 (pid ####)"` and then just... not be
+  reachable — Astro's dev-server daemon state file went stale (e.g. the tracked PID
+  was killed by something other than `astro dev stop`). Fix: `npx astro dev stop`
+  first (it'll say "Stopped dev server" or "No dev server is running" either way),
+  *then* start it. Don't assume "already running" means it's actually up — verify
+  with a real request before concluding the server is fine.
 
 ## Development
 

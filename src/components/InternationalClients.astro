@@ -1,0 +1,60 @@
+---
+const scenarios = [
+	"Nicaragüenses residiendo en el extranjero",
+	"Doble ciudadanía",
+	"Herencias y sucesiones",
+	"Inversionistas con intereses en el país",
+	"Compraventa o traspaso de bienes raíces",
+	"Poderes generales y especiales para trámites dentro y fuera de Nicaragua",
+	"Familias gestionando documentación desde el exterior",
+];
+---
+
+<section
+	id="clientes-en-el-exterior"
+	class="scroll-mt-20 bg-paper-deep px-4 py-20 sm:px-6 sm:py-28"
+>
+	<div class="mx-auto max-w-4xl" data-reveal>
+		<h2 class="font-serif text-3xl text-ink sm:text-4xl">
+			¿Se encuentra fuera de Nicaragua?
+		</h2>
+
+		<div class="mt-8 space-y-5 text-base leading-relaxed text-ink-soft sm:text-lg">
+			<p>
+				Muchos clientes de Lic. Mendoza García viven fuera del país —ya sea en
+				Estados Unidos, España, Costa Rica o cualquier otro destino— pero
+				mantienen asuntos legales, propiedades o trámites pendientes en Nicaragua.
+			</p>
+			<p>
+				Cuando la ley y la naturaleza del trámite lo permiten, Karla puede actuar
+				como su representante legal en Nicaragua, gestionando el proceso en su
+				nombre sin que usted tenga que estar presente en cada paso. Esto es
+				especialmente útil para:
+			</p>
+		</div>
+
+		<ul class="mt-6 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+			{
+				scenarios.map((item) => (
+					<li class="flex items-start gap-3 text-base text-ink-soft sm:text-lg">
+						<span
+							class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brass"
+							aria-hidden="true"
+						/>
+						<span>{item}</span>
+					</li>
+				))
+			}
+		</ul>
+
+		<p class="mt-8 max-w-2xl text-base leading-relaxed text-ink-soft sm:text-lg">
+			Si usted no puede viajar a Nicaragua pero necesita resolver un asunto
+			legal, <a
+				href="#contacto"
+				class="font-semibold text-ink underline decoration-brass decoration-2 underline-offset-4 transition-colors hover:text-brass-deep"
+			>escríbame</a
+			> —juntos evaluaremos qué se puede hacer a distancia y qué requiere su
+			presencia.
+		</p>
+	</div>
+</section>
