@@ -114,9 +114,11 @@ the hashed output filename and the `base` prefix correctly.
 
 ## Content notes
 
-- The bio copy in `About.astro` and `WorkingStyle.astro` has been revised several
-  times as the client refines her wording (headings, pull-quotes, and paragraph text
-  have all changed at least once). This file doesn't track exact prose — read the
+- The copy in `Hero.astro`, `About.astro`, and `WorkingStyle.astro` has been revised
+  several times as the client refines her wording (headings, the eyebrow line, chip
+  text, pull-quotes, and paragraph text have all changed at least once — e.g. the
+  Hero `<h1>` has flipped between "Lic. Karla Mendoza García" and "Licenciada Karla
+  Mendoza García" more than once). This file doesn't track exact prose — read the
   component directly for current copy; treat anything quoted below as either a
   structural fact (an id, a class, a number) or an explicit "don't reintroduce X"
   note, not a snapshot of the marketing copy.
