@@ -168,10 +168,15 @@ the hashed output filename and the `base` prefix correctly.
   responsive verification; it sets the viewport via the automation protocol, not a CLI
   flag. Install it with `npm install --no-save playwright` (don't add it as a real
   dependency — it's QA-only), and clean it out of `node_modules` afterward.
-- A recurring dark, rounded icon-cluster overlay sometimes appears in headless
-  Edge/Chromium screenshots (confirmed by testing: it tracks the *viewport* edge, not
-  page content, across different window sizes). It's a browser/OS chrome artifact from
-  the automation capture, not a bug in the site.
+- **Correction to an earlier note in this file:** the recurring dark, rounded
+  icon-cluster that shows up in `npm run dev` screenshots is **Astro's own dev
+  toolbar** (it injects several extra `<header>` elements into the page — a Playwright
+  `locator('header')` will hit it and throw a strict-mode-violation error listing
+  "Featured integrations", "Audit 0", "Settings", etc. Use a specific selector like
+  `header.sticky` to get the real nav). It was previously misdiagnosed here as a
+  generic "browser/OS chrome artifact." It only appears in dev mode, never in
+  `npm run build` output, so it's harmless either way — just don't waste time
+  debugging it as a site bug, and don't let it confuse a `locator('header')` query.
 - Flex children default to `min-width: auto`, i.e. they won't shrink below their
   content's natural width, which silently overflows on narrow viewports. Nav's brand
   link (`min-w-0` + `truncate` on the name span) and Hero's content wrapper (plain block,
