@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { getImage } from "astro:assets";
 import karlaPhoto from "../assets/images/karla-professional-photo.png";
+import WhatsAppButton from "../components/WhatsAppButton.astro";
 
 interface Props {
 	title: string;
@@ -81,6 +82,8 @@ const jsonLd = {
 			Saltar al contenido
 		</a>
 		<slot />
+
+		<WhatsAppButton />
 
 		<script>
 			const prefersReducedMotion = window.matchMedia(

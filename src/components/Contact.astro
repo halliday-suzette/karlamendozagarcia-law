@@ -1,4 +1,5 @@
 ---
+import { whatsappUrl } from "../lib/whatsapp";
 ---
 
 <section id="contacto" class="scroll-mt-20 bg-ink px-4 py-20 text-cream sm:px-6 sm:py-28">
@@ -10,7 +11,7 @@
 			al correo.
 		</p>
 
-		<div class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+		<div class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
 			<div>
 				<p class="font-mono text-xs uppercase tracking-wider text-brass">Correo</p>
 				<a
@@ -28,6 +29,20 @@
 					class="mt-2 inline-block font-serif text-lg text-cream underline decoration-brass decoration-2 underline-offset-4 transition-colors hover:text-brass"
 				>
 					+505 8732-8420
+				</a>
+			</div>
+
+			<div>
+				<p class="font-mono text-xs uppercase tracking-wider text-brass">WhatsApp</p>
+				<a
+					href={whatsappUrl}
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="Contáctame por WhatsApp"
+					data-analytics="whatsapp-contact-section-click"
+					class="mt-2 inline-block font-serif text-lg text-cream underline decoration-brass decoration-2 underline-offset-4 transition-colors hover:text-brass"
+				>
+					Contáctame
 				</a>
 			</div>
 

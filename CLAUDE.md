@@ -56,9 +56,12 @@ anyway.)
 src/
   layouts/Layout.astro   — <head>: title/meta, JSON-LD (schema.org Attorney, includes
                             her portrait as `image`), fonts, favicon, skip-link;
-                            global scroll-reveal IntersectionObserver
+                            global scroll-reveal IntersectionObserver; renders
+                            <WhatsAppButton /> after <slot /> so it's on every page
   components/
     Nav.astro              — sticky nav, KMG monogram, hamburger toggle (md: breakpoint)
+    WhatsAppButton.astro   — fixed bottom-right floating CTA (site-wide, via Layout),
+                             visible "Contáctame" label, uses src/lib/whatsapp.ts
     Hero.astro              — full-bleed background photo (src/assets/images/lady-justice-hero.webp,
                                via astro:assets <Image>) with gradient scrim, name/title/chips/CTA
     About.astro               — "Perfil Profesional" section: portrait (karla-professional-photo.png)
@@ -72,11 +75,15 @@ src/
                                      paragraph with an inline #contacto link ("escríbame")
     Practice.astro                 — "Áreas de práctica" grid; areas are PLACEHOLDERS,
                                       flagged in-code, pending client confirmation
-    Contact.astro                   — email/phone/address, dark section matching Hero
+    Contact.astro                   — email/phone/WhatsApp/address (4-col grid), dark
+                                       section matching Hero
     Footer.astro                     — credential line + dynamically-computed copyright year
                                         + "Sitio web por Halliday" credit link
   pages/index.astro                  — assembles Layout + all sections in order
   styles/global.css                  — Tailwind entry + @theme (colors, fonts) + a11y/motion CSS
+  lib/whatsapp.ts                    — single source of truth for the wa.me URL (number +
+                                        prefilled message, built with encodeURIComponent) —
+                                        imported by both WhatsAppButton.astro and Contact.astro
   assets/images/                     — lady-justice-hero.webp (Hero bg), karla-professional-photo.png
                                         (Perfil Profesional portrait) — both go through astro:assets,
                                         never reference these as plain public/ files
@@ -152,6 +159,18 @@ the hashed output filename and the `base` prefix correctly.
   that sentence was removed at the client's request. Current copy is just "Si necesita
   asesoría legal o desea agendar una consulta, escríbame directamente al correo."
   Don't re-add the courts-contact-her-here framing without checking with the client.
+- **WhatsApp**: the number is `50587328420` and the prefilled message is defined once
+  in `src/lib/whatsapp.ts` (`whatsappUrl`) — never hand-build a `wa.me` URL elsewhere;
+  import `whatsappUrl` instead, or the number/message can drift out of sync between
+  the floating button and the Contact section link. The floating button
+  (`WhatsAppButton.astro`) is intentionally the one place on the site that breaks the
+  brass/ink/paper palette — it uses WhatsApp's own brand green (`#25D366`) on purpose,
+  for recognizability, the same way a "Pay with PayPal" button would. Both WhatsApp
+  links carry a `data-analytics="whatsapp-*-click"` attribute that is **not wired to
+  anything** — there is no analytics provider on this site. The client was asked and
+  explicitly chose to skip analytics and skip a contact form (relying on the existing
+  email/phone/WhatsApp instead) — don't add either unprompted; if asked again, that's
+  a decision for the client, not something to default into.
 - `Footer.astro` has a "Sitio web por Halliday" credit line linking to
   `https://hallidayinc.com/` (`target="_blank" rel="noopener noreferrer"` — it's an
   external site, keep that so it opens in a new tab rather than navigating away from
