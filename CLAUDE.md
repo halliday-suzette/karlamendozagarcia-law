@@ -16,15 +16,32 @@ Spanish.
   colors and font families live in the `@theme` block at the top of
   [`src/styles/global.css`](src/styles/global.css). Add new theme tokens there, not in
   a JS config file.
-- Deployed via GitHub Pages (project page, not a `username.github.io` root repo), so
-  `astro.config.mjs` sets both `site` and `base: '/karlamendozagarcia-law'`. Any
-  internal link that isn't a `#fragment` or `mailto:`/`tel:` needs to be base-aware —
-  see the favicon link in `Layout.astro` for the pattern
-  (`import.meta.env.BASE_URL.replace(/\/$/, "")` + path; **`BASE_URL` is not
-  guaranteed to have a trailing slash**, concatenating naively breaks the URL).
+- Deployed via GitHub Pages behind a **custom domain, `abogadakarlamendoza.com`**,
+  served from the domain root. `astro.config.mjs` sets `site` to that domain and has
+  **no `base`**. `public/CNAME` (containing just `abogadakarlamendoza.com`) is what
+  makes GitHub Pages recognize the custom domain — Astro copies `public/` verbatim
+  into `dist/`, so this file has to exist in the repo and ship with every deploy, or
+  GitHub Pages silently reverts to serving only the `github.io` URL. Do not delete it.
+  - **This project used to be hosted at the GitHub Pages *project* URL**
+    (`halliday-suzette.github.io/karlamendozagarcia-law/`), which required
+    `base: '/karlamendozagarcia-law'`. When the custom domain was added, the site
+    briefly went out completely unstyled (raw HTML, no CSS/fonts/images, giant
+    literal hamburger-icon SVGs) because every asset URL was still being generated
+    with that `/karlamendozagarcia-law/` prefix, which 404s at the domain root. If
+    you ever see that failure mode again, check `astro.config.mjs` for a stray
+    `base` first — it's the same bug. Any internal link that isn't a `#fragment` or
+    `mailto:`/`tel:` still shouldn't be hardcoded with a leading slash assumption
+    baked in from memory of the old setup; check `import.meta.env.BASE_URL` usage
+    (e.g. the favicon link in `Layout.astro`) if `base` ever comes back for any reason
+    (**`BASE_URL` is not guaranteed to have a trailing slash** — concatenating
+    naively breaks the URL; that's why the favicon link does
+    `.replace(/\/$/, "")` + path rather than a plain string join).
 - `.github/workflows/deploy.yml` builds and deploys on push to `main` via
   `withastro/action`. Repo's GitHub Pages source must be set to "GitHub Actions" for
-  it to take effect (Settings → Pages).
+  it to take effect (Settings → Pages). The custom domain itself is configured in two
+  places that both have to agree: the repo's **Settings → Pages → Custom domain**
+  field, and `public/CNAME` in this repo — if they ever diverge, trust `public/CNAME`
+  as the source of truth since that's what actually ships.
 
 ## Fonts
 
@@ -115,9 +132,11 @@ spaces in import specifiers are fragile.
 If an asset needs to appear in `Layout.astro`'s JSON-LD (e.g. the `image` field on the
 Attorney schema), don't hand-write a path — import the asset there too and resolve it
 with `getImage()` + `new URL(result.src, Astro.site)` to get a correct absolute URL
-that already has the GitHub Pages `base` folded in (see the `profileImage` const in
-`Layout.astro`). Don't reuse a relative path string; `getImage()` is what accounts for
-the hashed output filename and the `base` prefix correctly.
+against `Astro.site` (see the `profileImage` const in `Layout.astro`). Don't reuse a
+relative path string; `getImage()` is what accounts for the hashed output filename.
+(This mattered even more when the site had a `base` path folded into every asset URL —
+see the custom-domain migration note above — but the pattern is still the right one
+now: never assume what an asset's public URL looks like, always derive it.)
 
 ## Content notes
 
@@ -226,7 +245,7 @@ the hashed output filename and the `base` prefix correctly.
 
 ```sh
 npm install
-npm run dev      # http://localhost:4321/karlamendozagarcia-law/ — note the base path
+npm run dev      # http://localhost:4321/
 npm run build    # outputs to ./dist/
 npm run preview
 ```

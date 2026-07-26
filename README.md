@@ -16,8 +16,7 @@ npm install
 npm run dev
 ```
 
-El sitio queda disponible en `http://localhost:4321/karlamendozagarcia-law/` (incluye el
-`base` de GitHub Pages configurado en `astro.config.mjs`).
+El sitio queda disponible en `http://localhost:4321/`.
 
 ## Compilar para producción
 
@@ -44,12 +43,14 @@ Para activarlo:
 
 1. En GitHub, ir a **Settings → Pages** del repositorio.
 2. En **Source**, seleccionar **GitHub Actions**.
-3. Hacer push a `main`; el workflow compila el sitio y lo publica en
-   `https://halliday-suzette.github.io/karlamendozagarcia-law/`.
+3. Hacer push a `main`; el workflow compila el sitio y lo publica.
 
-`astro.config.mjs` ya está configurado con `site` y `base` para esa URL. Si más
-adelante se usa un dominio propio (vía un archivo `CNAME`), hay que cambiar `site` a
-ese dominio y quitar `base`.
+El sitio usa un dominio propio, **abogadakarlamendoza.com**, configurado vía
+[`public/CNAME`](public/CNAME) — ese archivo tiene que existir para que GitHub Pages
+reconozca el dominio en cada despliegue (si se borra, GitHub Pages vuelve a servir
+solo en la URL `github.io`). `astro.config.mjs` está configurado con `site` apuntando
+a ese dominio y **sin** `base` (el dominio propio sirve desde la raíz, a diferencia de
+la URL de proyecto `usuario.github.io/repo/` que sí necesitaba `base`).
 
 ## Estructura
 
