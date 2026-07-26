@@ -2,7 +2,9 @@
 import "../styles/global.css";
 import { getImage } from "astro:assets";
 import karlaPhoto from "../assets/images/karla-professional-photo.png";
+import ladyJusticeHero from "../assets/images/lady-justice-hero.webp";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
+import { faqItems } from "../lib/faq";
 
 interface Props {
 	title: string;
@@ -11,7 +13,12 @@ interface Props {
 
 const { title, description } = Astro.props;
 
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+
 const profileImage = await getImage({ src: karlaPhoto, format: "webp", width: 600 });
+// Wide crop for social-share cards (1.91:1-ish) — the portrait photo above is for the
+// JSON-LD `image` field, not a social banner, so this uses the landscape hero photo instead.
+const socialImage = await getImage({ src: ladyJusticeHero, format: "webp", width: 1200 });
 
 const jsonLd = {
 	"@context": "https://schema.org",
@@ -20,6 +27,8 @@ const jsonLd = {
 	honorificPrefix: "Lic.",
 	jobTitle: "Abogado y Notario Público",
 	image: new URL(profileImage.src, Astro.site).href,
+	url: canonicalUrl.href,
+	inLanguage: "es-NI",
 	email: "karlamendoza1970@gmail.com",
 	telephone: "+505-8732-8420",
 	address: {
@@ -28,6 +37,20 @@ const jsonLd = {
 		addressLocality: "León",
 		addressCountry: "NI",
 	},
+	// Approximate León, Nicaragua city-center coordinates — placeholder until a precise
+	// Google Business Profile pin exists; not geocoded to the exact office address.
+	geo: {
+		"@type": "GeoCoordinates",
+		latitude: 12.434,
+		longitude: -86.878,
+	},
+	areaServed: [
+		{ "@type": "City", name: "León, Nicaragua" },
+		{ "@type": "Country", name: "Nicaragua" },
+		{ "@type": "Country", name: "Estados Unidos" },
+		{ "@type": "Country", name: "España" },
+		{ "@type": "Country", name: "Costa Rica" },
+	],
 	alumniOf: {
 		"@type": "CollegeOrUniversity",
 		name: "Universidad Nacional Autónoma de Nicaragua (UNAN-León)",
@@ -47,6 +70,19 @@ const jsonLd = {
 		value: "No. 14680",
 	},
 };
+
+const faqJsonLd = {
+	"@context": "https://schema.org",
+	"@type": "FAQPage",
+	mainEntity: faqItems.map((item) => ({
+		"@type": "Question",
+		name: item.question,
+		acceptedAnswer: {
+			"@type": "Answer",
+			text: item.answer,
+		},
+	})),
+};
 ---
 
 <!doctype html>
@@ -58,6 +94,20 @@ const jsonLd = {
 
 		<title>{title}</title>
 		<meta name="description" content={description} />
+		<link rel="canonical" href={canonicalUrl} />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Lic. Karla Mendoza García — Abogado y Notario Público" />
+		<meta property="og:locale" content="es_NI" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:image" content={new URL(socialImage.src, Astro.site)} />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={new URL(socialImage.src, Astro.site)} />
 
 		<link
 			rel="icon"
@@ -73,6 +123,7 @@ const jsonLd = {
 		/>
 
 		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+		<script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
 	</head>
 	<body class="bg-paper font-sans text-ink-soft antialiased">
 		<a
