@@ -1,0 +1,530 @@
+---
+import { whatsappUrl } from "../lib/whatsapp";
+
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqernrga";
+
+const labelClass = "block font-mono text-xs uppercase tracking-wider text-brass";
+const requiredMark = `<span aria-hidden="true" class="text-brass/70">*</span>`;
+const fieldClass =
+	"mt-2 w-full rounded-sm border border-cream/25 bg-ink-soft/40 px-3 py-2.5 text-cream placeholder-cream/40 transition-colors focus:border-brass";
+const errorClass = "mt-1.5 hidden text-sm text-red-300";
+const legendClass = "font-mono text-xs uppercase tracking-wider text-brass";
+---
+
+<div id="formulario-consulta" class="scroll-mt-20" data-reveal>
+	<h3 class="font-serif text-2xl text-cream sm:text-3xl">
+		Formulario de Solicitud de Consulta
+	</h3>
+	<p class="mt-3 max-w-2xl text-cream/80">
+		Complete el siguiente formulario y nos pondremos en contacto con usted para
+		coordinar su consulta.
+	</p>
+
+	<form
+		id="consultation-form"
+		novalidate
+		class="mt-10 space-y-10"
+		action={FORMSPREE_ENDPOINT}
+		method="POST"
+	>
+		<input type="hidden" name="_subject" value="Nueva solicitud de consulta desde el sitio web" />
+		<input
+			type="text"
+			name="_gotcha"
+			tabindex="-1"
+			autocomplete="off"
+			class="absolute left-[-9999px]"
+			aria-hidden="true"
+		/>
+
+		<fieldset class="m-0 border-x-0 border-b-0 border-t-0 p-0">
+			<legend class={legendClass}>Sección 1 — Información de contacto</legend>
+			<div class="mt-6 grid gap-6 sm:grid-cols-2">
+				<div>
+					<label for="nombre" class={labelClass}>
+						Nombre completo <Fragment set:html={requiredMark} />
+					</label>
+					<input
+						type="text"
+						id="nombre"
+						name="nombre"
+						required
+						aria-required="true"
+						autocomplete="name"
+						placeholder="Su nombre y apellidos"
+						aria-describedby="nombre-error"
+						class={fieldClass}
+					/>
+					<p id="nombre-error" class={errorClass} role="alert"></p>
+				</div>
+
+				<div>
+					<label for="correo" class={labelClass}>
+						Correo electrónico <Fragment set:html={requiredMark} />
+					</label>
+					<input
+						type="email"
+						id="correo"
+						name="correo"
+						required
+						aria-required="true"
+						autocomplete="email"
+						placeholder="usted@correo.com"
+						aria-describedby="correo-error"
+						class={fieldClass}
+					/>
+					<p id="correo-error" class={errorClass} role="alert"></p>
+				</div>
+
+				<div>
+					<label for="telefono" class={labelClass}>
+						Teléfono / WhatsApp <Fragment set:html={requiredMark} />
+					</label>
+					<input
+						type="tel"
+						id="telefono"
+						name="telefono"
+						required
+						aria-required="true"
+						autocomplete="tel"
+						placeholder="+505 8888-8888"
+						aria-describedby="telefono-error"
+						class={fieldClass}
+					/>
+					<p id="telefono-error" class={errorClass} role="alert"></p>
+				</div>
+
+				<div>
+					<label for="ubicacion" class={labelClass}>
+						¿Dónde se encuentra actualmente? <Fragment set:html={requiredMark} />
+					</label>
+					<select
+						id="ubicacion"
+						name="ubicacion"
+						required
+						aria-required="true"
+						aria-describedby="ubicacion-error"
+						class={fieldClass}
+					>
+						<option value="" disabled selected>Seleccione una opción</option>
+						<option value="León, Nicaragua">León, Nicaragua</option>
+						<option value="Otra ciudad de Nicaragua">Otra ciudad de Nicaragua</option>
+						<option value="Estados Unidos">Estados Unidos</option>
+						<option value="España">España</option>
+						<option value="Costa Rica">Costa Rica</option>
+						<option value="Otro">Otro</option>
+					</select>
+					<p id="ubicacion-error" class={errorClass} role="alert"></p>
+				</div>
+			</div>
+		</fieldset>
+
+		<fieldset class="m-0 border-x-0 border-b-0 border-t border-cream/15 p-0 pt-8">
+			<legend class={legendClass}>Sección 2 — Sobre su caso</legend>
+			<div class="mt-6 grid gap-6">
+				<div>
+					<label for="area_legal" class={labelClass}>
+						¿En qué área legal necesita ayuda? <Fragment set:html={requiredMark} />
+					</label>
+					<select
+						id="area_legal"
+						name="area_legal"
+						required
+						aria-required="true"
+						aria-describedby="area_legal-error"
+						class={`sm:max-w-md ${fieldClass}`}
+					>
+						<option value="" disabled selected>Seleccione una opción</option>
+						<option value="Trámites notariales">Trámites notariales</option>
+						<option value="Derecho civil y de familia">Derecho civil y de familia</option>
+						<option value="Contratos">Contratos</option>
+						<option value="Bienes raíces">Bienes raíces</option>
+						<option value="Poderes y representación">Poderes y representación</option>
+						<option value="Asesoría legal general">Asesoría legal general</option>
+						<option value="No estoy seguro">No estoy seguro</option>
+						<option value="Otro">Otro</option>
+					</select>
+					<p id="area_legal-error" class={errorClass} role="alert"></p>
+				</div>
+
+				<div>
+					<label for="descripcion" class={labelClass}>
+						Breve descripción de su situación <Fragment set:html={requiredMark} />
+					</label>
+					<p class="mt-1 text-xs text-cream/60">
+						No comparta información confidencial detallada aún —esto es solo para
+						que podamos prepararnos para su consulta.
+					</p>
+					<textarea
+						id="descripcion"
+						name="descripcion"
+						required
+						aria-required="true"
+						rows="4"
+						placeholder="Cuéntenos brevemente qué necesita..."
+						aria-describedby="descripcion-helper descripcion-error"
+						class={fieldClass}></textarea>
+					<p id="descripcion-error" class={errorClass} role="alert"></p>
+				</div>
+			</div>
+		</fieldset>
+
+		<div
+			id="seccion-exterior"
+			inert
+			aria-hidden="true"
+			class="max-h-0 -translate-y-2 overflow-hidden border-t border-cream/15 p-0 pt-0 opacity-0 transition-all duration-300 ease-out motion-reduce:transition-none"
+		>
+			<p class={legendClass}>Sección 3 — Trámites desde el extranjero</p>
+			<div class="mt-6 grid gap-6 pb-2 sm:grid-cols-2">
+				<div>
+					<label for="tramite_poder" class={labelClass}>
+						¿Puede realizar el trámite mediante un poder notarial sin viajar a
+						Nicaragua, o requiere presencia física?
+					</label>
+					<select
+						id="tramite_poder"
+						name="tramite_poder"
+						aria-describedby="tramite_poder-error"
+						class={fieldClass}
+					>
+						<option value="" disabled selected>Seleccione una opción</option>
+						<option value="No estoy seguro">No estoy seguro</option>
+						<option value="Prefiero no viajar">Prefiero no viajar</option>
+						<option value="Puedo viajar si es necesario">Puedo viajar si es necesario</option>
+					</select>
+					<p id="tramite_poder-error" class={errorClass} role="alert"></p>
+				</div>
+
+				<div>
+					<label for="representante_nicaragua" class={labelClass}>
+						¿Tiene familiares o representantes en Nicaragua que puedan actuar en su
+						nombre?
+					</label>
+					<select
+						id="representante_nicaragua"
+						name="representante_nicaragua"
+						aria-describedby="representante_nicaragua-error"
+						class={fieldClass}
+					>
+						<option value="" disabled selected>Seleccione una opción</option>
+						<option value="Sí">Sí</option>
+						<option value="No">No</option>
+						<option value="No aplica">No aplica</option>
+					</select>
+					<p id="representante_nicaragua-error" class={errorClass} role="alert"></p>
+				</div>
+			</div>
+		</div>
+
+		<fieldset class="m-0 border-x-0 border-b-0 border-t border-cream/15 p-0 pt-8">
+			<legend class={legendClass}>Sección 4 — Logística</legend>
+			<div class="mt-6 grid gap-6 sm:grid-cols-2">
+				<div>
+					<span id="preferencia_contacto-legend" class={labelClass}>
+						¿Cómo prefiere que le contactemos? <Fragment set:html={requiredMark} />
+					</span>
+					<div
+						role="radiogroup"
+						aria-labelledby="preferencia_contacto-legend"
+						aria-describedby="preferencia_contacto-error"
+						class="mt-3 flex flex-col gap-2"
+					>
+						<label class="flex items-center gap-2 text-cream/90">
+							<input
+								type="radio"
+								name="preferencia_contacto"
+								value="Llamada telefónica"
+								required
+								class="h-4 w-4 border-cream/40 bg-ink-soft text-brass focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky"
+							/>
+							Llamada telefónica
+						</label>
+						<label class="flex items-center gap-2 text-cream/90">
+							<input
+								type="radio"
+								name="preferencia_contacto"
+								value="WhatsApp"
+								required
+								class="h-4 w-4 border-cream/40 bg-ink-soft text-brass focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky"
+							/>
+							WhatsApp
+						</label>
+						<label class="flex items-center gap-2 text-cream/90">
+							<input
+								type="radio"
+								name="preferencia_contacto"
+								value="Correo electrónico"
+								required
+								class="h-4 w-4 border-cream/40 bg-ink-soft text-brass focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky"
+							/>
+							Correo electrónico
+						</label>
+					</div>
+					<p id="preferencia_contacto-error" class={errorClass} role="alert"></p>
+				</div>
+
+				<div>
+					<label for="horario_preferido" class={labelClass}>
+						¿Cuál es el mejor horario para contactarle?
+					</label>
+					<select id="horario_preferido" name="horario_preferido" class={fieldClass}>
+						<option value="" selected>Seleccione una opción</option>
+						<option value="Mañana">Mañana</option>
+						<option value="Tarde">Tarde</option>
+						<option value="Cualquier hora">Cualquier hora</option>
+					</select>
+				</div>
+			</div>
+		</fieldset>
+
+		<fieldset class="m-0 border-x-0 border-b-0 border-t border-cream/15 p-0 pt-8">
+			<legend class={legendClass}>Sección 5 — Consentimiento</legend>
+			<div class="mt-6 flex items-start gap-3">
+				<input
+					type="checkbox"
+					id="consentimiento"
+					name="consentimiento"
+					required
+					aria-required="true"
+					aria-describedby="consentimiento-error"
+					class="mt-1 h-4 w-4 shrink-0 rounded-sm border-cream/40 bg-ink-soft text-brass focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky"
+				/>
+				<label for="consentimiento" class="text-sm leading-relaxed text-cream/90">
+					Entiendo que enviar este formulario no establece una relación
+					abogado-cliente hasta que se confirme una consulta.
+				</label>
+			</div>
+			<p id="consentimiento-error" class={`${errorClass} ml-7`} role="alert"></p>
+		</fieldset>
+
+		<div>
+			<button
+				id="consultation-submit"
+				type="submit"
+				class="inline-flex items-center gap-2 rounded-sm bg-brass px-6 py-3 font-sans text-sm font-semibold text-ink transition-colors hover:bg-brass-deep hover:text-cream disabled:cursor-not-allowed disabled:opacity-60"
+			>
+				Enviar solicitud
+			</button>
+		</div>
+
+		<div
+			id="form-submit-error"
+			role="alert"
+			class="hidden rounded-sm border border-red-400/40 bg-red-950/30 p-4 text-sm text-red-200"
+		>
+			Hubo un problema al enviar su solicitud. Por favor intente nuevamente, o
+			escríbanos directamente por{" "}
+			<a
+				href={whatsappUrl}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="font-semibold underline decoration-2 underline-offset-4"
+			>WhatsApp</a
+			> o al correo{" "}
+			<a
+				href="mailto:karlamendoza1970@gmail.com"
+				class="font-semibold underline decoration-2 underline-offset-4"
+			>karlamendoza1970@gmail.com</a
+			>.
+		</div>
+	</form>
+
+	<div
+		id="form-success"
+		role="status"
+		aria-live="polite"
+		tabindex="-1"
+		class="hidden rounded-sm border border-brass/40 bg-ink-soft/40 p-6"
+	>
+		<p class="font-serif text-xl text-cream">¡Gracias!</p>
+		<p class="mt-2 text-cream/80">
+			Hemos recibido su solicitud. Nos pondremos en contacto con usted pronto.
+		</p>
+	</div>
+</div>
+
+<script>
+	const form = document.getElementById("consultation-form") as HTMLFormElement | null;
+	const submitButton = document.getElementById(
+		"consultation-submit",
+	) as HTMLButtonElement | null;
+	const successPanel = document.getElementById("form-success");
+	const submitErrorPanel = document.getElementById("form-submit-error");
+	const ubicacionSelect = document.getElementById("ubicacion") as HTMLSelectElement | null;
+	const conditionalSection = document.getElementById("seccion-exterior");
+
+	const DOMESTIC_LOCATIONS = new Set(["León, Nicaragua", "Otra ciudad de Nicaragua"]);
+	const HIDDEN_CLASSES = ["max-h-0", "opacity-0", "-translate-y-2"];
+	const VISIBLE_CLASSES = ["max-h-[600px]", "opacity-100", "translate-y-0"];
+
+	function fieldErrorMessage(field: HTMLElement): string {
+		if (field instanceof HTMLInputElement && field.type === "checkbox") {
+			return "Debe aceptar esta condición para continuar.";
+		}
+		if (field instanceof HTMLInputElement && field.type === "email") {
+			const value = field.value.trim();
+			return value === ""
+				? "Este campo es obligatorio."
+				: "Ingrese un correo electrónico válido.";
+		}
+		if (field instanceof HTMLSelectElement) {
+			return "Seleccione una opción.";
+		}
+		return "Este campo es obligatorio.";
+	}
+
+	function setFieldValidity(field: HTMLElement, valid: boolean) {
+		const errorEl = document.getElementById(`${field.id}-error`);
+		field.setAttribute("aria-invalid", String(!valid));
+		field.classList.toggle("border-red-400", !valid);
+		if (errorEl) {
+			errorEl.textContent = valid ? "" : fieldErrorMessage(field);
+			errorEl.classList.toggle("hidden", valid);
+		}
+	}
+
+	function isEmailValid(value: string): boolean {
+		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+	}
+
+	function showConditionalSection() {
+		if (!conditionalSection) return;
+		conditionalSection.inert = false;
+		conditionalSection.removeAttribute("aria-hidden");
+		conditionalSection
+			.querySelectorAll<HTMLSelectElement>("select")
+			.forEach((field) => field.setAttribute("required", "true"));
+		conditionalSection.classList.remove(...HIDDEN_CLASSES);
+		conditionalSection.classList.add(...VISIBLE_CLASSES);
+	}
+
+	function hideConditionalSection() {
+		if (!conditionalSection) return;
+		conditionalSection.inert = true;
+		conditionalSection.setAttribute("aria-hidden", "true");
+		conditionalSection
+			.querySelectorAll<HTMLSelectElement>("select")
+			.forEach((field) => {
+				field.removeAttribute("required");
+				setFieldValidity(field, true);
+			});
+		conditionalSection.classList.remove(...VISIBLE_CLASSES);
+		conditionalSection.classList.add(...HIDDEN_CLASSES);
+	}
+
+	function updateConditionalSection() {
+		if (!ubicacionSelect) return;
+		const value = ubicacionSelect.value;
+		const isForeign = value !== "" && !DOMESTIC_LOCATIONS.has(value);
+		if (isForeign) {
+			showConditionalSection();
+		} else {
+			hideConditionalSection();
+		}
+	}
+
+	ubicacionSelect?.addEventListener("change", updateConditionalSection);
+
+	function validateForm(): HTMLElement | null {
+		if (!form) return null;
+		let firstInvalid: HTMLElement | null = null;
+
+		const requiredFields = form.querySelectorAll<HTMLElement>(
+			"[required]:not([type='radio'])",
+		);
+		requiredFields.forEach((field) => {
+			let valid = true;
+			if (field instanceof HTMLInputElement && field.type === "checkbox") {
+				valid = field.checked;
+			} else if (
+				field instanceof HTMLInputElement ||
+				field instanceof HTMLSelectElement ||
+				field instanceof HTMLTextAreaElement
+			) {
+				valid = field.value.trim() !== "";
+				if (valid && field instanceof HTMLInputElement && field.type === "email") {
+					valid = isEmailValid(field.value.trim());
+				}
+			}
+			setFieldValidity(field, valid);
+			if (!valid && !firstInvalid) firstInvalid = field;
+		});
+
+		const contactRadios = form.querySelectorAll<HTMLInputElement>(
+			"input[name='preferencia_contacto']",
+		);
+		if (contactRadios.length) {
+			const anyChecked = Array.from(contactRadios).some((radio) => radio.checked);
+			const errorEl = document.getElementById("preferencia_contacto-error");
+			if (errorEl) {
+				errorEl.textContent = anyChecked ? "" : "Seleccione una forma de contacto.";
+				errorEl.classList.toggle("hidden", anyChecked);
+			}
+			if (!anyChecked && !firstInvalid) firstInvalid = contactRadios[0];
+		}
+
+		return firstInvalid;
+	}
+
+	function clearSubmitError() {
+		submitErrorPanel?.classList.add("hidden");
+	}
+
+	form?.addEventListener("submit", async (event) => {
+		event.preventDefault();
+		clearSubmitError();
+
+		const invalidField = validateForm();
+		if (invalidField) {
+			invalidField.focus();
+			return;
+		}
+
+		if (!form || !submitButton) return;
+
+		const originalLabel = submitButton.textContent;
+		submitButton.disabled = true;
+		submitButton.textContent = "Enviando…";
+
+		try {
+			const response = await fetch(form.action, {
+				method: "POST",
+				headers: { Accept: "application/json" },
+				body: new FormData(form),
+			});
+
+			if (response.ok) {
+				form.hidden = true;
+				successPanel?.classList.remove("hidden");
+				successPanel?.focus();
+			} else {
+				submitErrorPanel?.classList.remove("hidden");
+			}
+		} catch {
+			submitErrorPanel?.classList.remove("hidden");
+		} finally {
+			submitButton.disabled = false;
+			submitButton.textContent = originalLabel;
+		}
+	});
+
+	const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+	const scrollFocusTarget = document.getElementById("formulario-consulta");
+	const firstField = document.getElementById("nombre");
+
+	document.querySelectorAll<HTMLAnchorElement>('a[href="#formulario-consulta"]').forEach((link) => {
+		link.addEventListener("click", (event) => {
+			event.preventDefault();
+			scrollFocusTarget?.scrollIntoView({
+				behavior: prefersReducedMotion ? "auto" : "smooth",
+				block: "start",
+			});
+			window.setTimeout(
+				() => firstField?.focus(),
+				prefersReducedMotion ? 0 : 600,
+			);
+			history.pushState(null, "", "#formulario-consulta");
+		});
+	});
+</script>
