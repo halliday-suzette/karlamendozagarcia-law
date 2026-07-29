@@ -72,7 +72,8 @@ anyway.)
 ```
 src/
   layouts/Layout.astro   — <head>: title/meta, JSON-LD (schema.org Attorney, includes
-                            her portrait as `image`), fonts, favicon, skip-link;
+                            her portrait as `image`, + FAQPage), fonts, favicon,
+                            skip-link, Plausible analytics snippet (see Content notes);
                             global scroll-reveal IntersectionObserver; renders
                             <WhatsAppButton /> after <slot /> so it's on every page
   components/
@@ -87,30 +88,48 @@ src/
     Credentials.astro            — "Formación y credenciales": single-column info list
                                     (Formación académica / Afiliación profesional / Credencial
                                     oficial) — no graphic, see Content notes below
-    InternationalClients.astro    — "¿Se encuentra fuera de Nicaragua?": 2 intro
-                                     paragraphs + 2-col brass-bullet checklist + closing
-                                     paragraph with an inline #contacto link ("escríbame")
+    InternationalClients.astro    — "¿Se encuentra fuera de Nicaragua?": brief 2–3
+                                     sentence summary + 2-col brass-bullet checklist +
+                                     closing paragraph linking to #preguntas-frecuentes
+                                     and #contacto (kept intentionally short — see
+                                     Content notes)
     Practice.astro                 — "Áreas de práctica" grid; areas are PLACEHOLDERS,
                                       flagged in-code, pending client confirmation
-    Contact.astro                   — email/phone/WhatsApp/address (4-col grid), dark
-                                       section matching Hero
-    Footer.astro                     — credential line + dynamically-computed copyright year
-                                        + "Sitio web por Halliday" credit link
-  pages/index.astro                  — assembles Layout + all sections in order
-  styles/global.css                  — Tailwind entry + @theme (colors, fonts) + a11y/motion CSS
-  lib/whatsapp.ts                    — single source of truth for the wa.me URL (number +
-                                        prefilled message, built with encodeURIComponent) —
-                                        imported by both WhatsAppButton.astro and Contact.astro
-  assets/images/                     — lady-justice-hero.webp (Hero bg), karla-professional-photo.png
-                                        (Perfil Profesional portrait) — both go through astro:assets,
-                                        never reference these as plain public/ files
+    Faq.astro                       — "Preguntas frecuentes", renders src/lib/faq.ts;
+                                       backs the FAQPage JSON-LD in Layout.astro — don't
+                                       change question/answer content here without also
+                                       checking that JSON-LD block
+    Contact.astro                    — hosts <ConsultationForm /> as the primary content,
+                                        then a secondary "También puede contactarme
+                                        directamente" NAP grid (email/phone/WhatsApp/
+                                        address) below a divider; dark section matching Hero
+    ConsultationForm.astro            — "Formulario de Solicitud de Consulta": 5-section
+                                         form (contact info / case details / conditional
+                                         overseas-logistics fields / contact preference /
+                                         consent), Formspree-backed (see Content notes),
+                                         vanilla-JS validation + inline success/error
+                                         states; imported by Contact.astro only, not a
+                                         top-level section in index.astro
+    Footer.astro                       — credential line + dynamically-computed copyright
+                                          year + "Sitio web por Halliday" credit link
+  pages/index.astro                    — assembles Layout + all sections in order
+  styles/global.css                    — Tailwind entry + @theme (colors, fonts) + a11y/motion CSS
+  lib/whatsapp.ts                      — single source of truth for the wa.me URL (number +
+                                          prefilled message, built with encodeURIComponent) —
+                                          imported by both WhatsAppButton.astro and Contact.astro
+  lib/faq.ts                           — question/answer data for Faq.astro; also the source
+                                          for Layout.astro's FAQPage JSON-LD, so the two never
+                                          drift apart by construction
+  assets/images/                       — lady-justice-hero.webp (Hero bg), karla-professional-photo.png
+                                          (Perfil Profesional portrait) — both go through astro:assets,
+                                          never reference these as plain public/ files
 ```
 
 One component per section — keep it that way when adding sections rather than growing
 `index.astro` into a monolith.
 
 Section order in `index.astro`: `Hero → About → WorkingStyle → Credentials →
-InternationalClients → Practice → Contact`. Sections strictly alternate `bg-paper` /
+InternationalClients → Practice → Faq → Contact`. Sections strictly alternate `bg-paper` /
 `bg-paper-deep` backgrounds for visual separation (Hero and Contact are the `bg-ink`
 bookends). If you insert a section, either background works, but you'll need to flip
 every section after it to keep the alternation — that's what happened when
@@ -167,13 +186,20 @@ now: never assume what an asset's public URL looks like, always derive it.)
 - Address is written **"Iglesia San José, 3 c. al Norte"** — capital N on "Norte". It
   appears in both `Contact.astro` and the JSON-LD `streetAddress` in `Layout.astro`;
   keep them in sync.
-- The Contact section's Correo/Teléfono/Ubicación values are `text-lg`, not `text-xl`
-  — they were sized down specifically so `karlamendoza1970@gmail.com` fits on one
-  line. That column's width is capped by the section's `max-w-4xl` container
-  regardless of viewport, so this wraps at *every* desktop width, not just narrow
-  ones, if the font size goes back up. There's also a `<wbr />` before `.com` in the
-  email markup as a safety net so if it ever does wrap, it breaks at a sensible point
-  instead of mid-word — don't reintroduce `break-all`, which is what caused that.
+- The Contact section's Correo/Teléfono/Ubicación values are `text-lg`, not `text-xl`.
+  Sizing down alone turned out **not** to be enough to keep
+  `karlamendoza1970@gmail.com` on one line: at the `lg` breakpoint the "También puede
+  contactarme directamente" grid used to be a flat `lg:grid-cols-4` inside the
+  section's `max-w-4xl` container, giving every column a fixed ~200px regardless of
+  viewport — ~60px short of what the email needs at `text-lg`, so it wrapped at
+  *every* desktop width, not just narrow ones. Fixed by widening just the Correo
+  track: `lg:grid-cols-[1.8fr_1fr_1fr_1fr]` (Correo gets ~1.8x a normal column, the
+  other three still have plenty of room) plus `whitespace-nowrap` on the email link
+  itself (replacing `break-words`, which is what let it wrap in the first place).
+  There's still a `<wbr />` before `.com` in the markup as a defense-in-depth
+  fallback in case the address ever changes to something longer — don't reintroduce
+  `break-all`, and don't shrink the grid back to plain equal `lg:grid-cols-4` without
+  re-checking that the email still fits.
 - The original brief called for Contact's intro paragraph to note that her email is
   "la misma dirección que utilizan los juzgados para contactarme de forma oficial" —
   that sentence was removed at the client's request. Current copy is just "Si necesita
@@ -186,11 +212,73 @@ now: never assume what an asset's public URL looks like, always derive it.)
   (`WhatsAppButton.astro`) is intentionally the one place on the site that breaks the
   brass/ink/paper palette — it uses WhatsApp's own brand green (`#25D366`) on purpose,
   for recognizability, the same way a "Pay with PayPal" button would. Both WhatsApp
-  links carry a `data-analytics="whatsapp-*-click"` attribute that is **not wired to
-  anything** — there is no analytics provider on this site. The client was asked and
-  explicitly chose to skip analytics and skip a contact form (relying on the existing
-  email/phone/WhatsApp instead) — don't add either unprompted; if asked again, that's
-  a decision for the client, not something to default into.
+  links carry a `data-analytics="whatsapp-*-click"` attribute that is still **not
+  wired to anything** — Plausible (see below) doesn't auto-track it; that would need
+  explicit `plausible('whatsapp-...-click')` calls added deliberately, not assumed.
+  - **There are exactly two WhatsApp touchpoints on the page** (floating button +
+    Contact card link) — `WhatsAppButton.astro` is only ever rendered once, from
+    `Layout.astro`, right after `<slot />`. If it's ever reported as appearing a
+    third time "after the footer," that's very likely someone reading raw DOM/source
+    order and mistaking the floating button's actual position in the markup (it sits
+    right after `<Footer />` in source, since Layout renders it post-slot) for a
+    second instance — it's `position: fixed`, so it always renders pinned
+    bottom-right regardless of where it sits in the DOM. Confirm with
+    `grep -o 'wa\.me' dist/index.html | wc -l` (should be 2) before assuming a real
+    duplicate-render bug and touching `Layout.astro`.
+- **Analytics and the contact form are no longer both declined.** An earlier version
+  of this note said the client explicitly chose to skip both, relying on
+  email/phone/WhatsApp instead — that decision was revisited and both have since been
+  added: a real consultation-request form (`ConsultationForm.astro`, see below) and
+  Plausible analytics (also below). If you're asked to add either again, they already
+  exist — check there first rather than re-implementing from scratch or assuming the
+  old "client declined" framing still holds.
+- **`ConsultationForm.astro`** ("Formulario de Solicitud de Consulta") submits via
+  Formspree, not a custom backend — the endpoint is hardcoded as
+  `FORMSPREE_ENDPOINT` at the top of the component
+  (`https://formspree.io/f/mqernrga`, a real, live production form ID — treat it as a
+  client-provided fact like the carné number, don't swap it back to a placeholder).
+  Client-side validation is custom vanilla JS with Spanish error messages (the form
+  has `novalidate` so the browser's native, locale-dependent validation text never
+  shows); submission is AJAX (`fetch` + `Accept: application/json`) so success shows
+  an inline confirmation panel instead of a redirect. Sección 3 (overseas-logistics
+  questions) is hidden by default via the `inert` attribute plus Tailwind
+  opacity/max-height/translate transition classes, and only becomes visible +
+  `required` when "¿Dónde se encuentra actualmente?" is answered with something other
+  than León or another Nicaraguan city — toggled in the component's own `<script>`,
+  not the global reveal system in `Layout.astro` (deliberately kept separate; that
+  global `IntersectionObserver` is for whole-section scroll-reveal, a different
+  concern from a field's conditional visibility). The Hero CTA ("Solicitar una
+  consulta →") targets `#formulario-consulta`, not `#contacto` — clicking it
+  smooth-scrolls to the form specifically and focuses the "Nombre completo" field,
+  handled by a click listener in `ConsultationForm.astro` that intercepts the anchor
+  and calls `scrollIntoView` + `.focus()` (respects `prefers-reduced-motion`). The
+  Sección 5 consent-checkbox copy is exact client/legal-review language (not
+  paraphrasable marketing copy like most of the site) — treat it the same way as the
+  carné number or address: don't casually reword it. The `#form-submit-error` panel
+  (shown when the Formspree POST fails) is deliberately just one short line — "Por
+  favor intente nuevamente, o contáctenos directamente más abajo." — with no
+  email/WhatsApp links of its own; it used to repeat both in full, which duplicated
+  the NAP grid sitting a few lines below it in the same section. Don't re-add contact
+  links there; point people at the card below instead.
+- `InternationalClients.astro` used to carry a second paragraph explaining *how* an
+  overseas client can act through a poder without traveling — that's now covered in
+  more depth by two `lib/faq.ts` entries ("¿Puede un nicaragüense en el extranjero...
+  sin viajar...?" and "¿Atiende clientes fuera de León?"), so it was cut down to a
+  brief summary to avoid saying the same thing twice a few sections apart. Don't
+  re-expand this section's prose to re-explain the mechanics — extend the FAQ entries
+  instead, and keep this section as the short version + pointer.
+- **Plausible analytics** is wired into `Layout.astro`'s `<head>`, right after the two
+  JSON-LD `<script>` blocks: a loader script tag (pointed at
+  `plausible.io/js/pa-KjW10VMDAfWM5-5bZ8p3z.js`, this site's actual Plausible script
+  ID) plus a small `window.plausible = ...` init snippet, tracking pageviews
+  site-wide, cookie-free (no consent banner needed). Both `<script>` tags carry
+  Astro's `is:inline` directive — without it, Astro processes/bundles `<script>` tags
+  by default (adds `type="module"`, may dedupe/rewrite them), which can silently
+  break a third-party snippet like this that depends on running exactly as given, in
+  global scope, in order. Any other third-party embed added to this site should get
+  the same `is:inline` treatment. This does **not** wire up the
+  `data-analytics="whatsapp-*-click"` attributes mentioned above — those still don't
+  fire anything.
 - `Footer.astro` has a "Sitio web por Halliday" credit line linking to
   `https://hallidayinc.com/` (`target="_blank" rel="noopener noreferrer"` — it's an
   external site, keep that so it opens in a new tab rather than navigating away from
