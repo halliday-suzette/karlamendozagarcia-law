@@ -36,6 +36,17 @@ Spanish.
     (**`BASE_URL` is not guaranteed to have a trailing slash** — concatenating
     naively breaks the URL; that's why the favicon link does
     `.replace(/\/$/, "")` + path rather than a plain string join).
+- `public/google553bd40e1b13ed74.html` is a Google Search Console domain-ownership
+  verification file. Same mechanism as `public/CNAME` above: it only works because
+  everything in `public/` ships verbatim into `dist/`, so it has to live there (not
+  the project root) to be reachable at
+  `https://abogadakarlamendoza.com/google553bd40e1b13ed74.html` after deploy. It was
+  originally downloaded straight into the project root by mistake, which would have
+  404'd post-deploy and failed Google's check — moved into `public/` to fix that.
+  Don't delete this file; if Search Console verification is ever redone, a new
+  filename will be issued, and the old one can be removed only once the new one is
+  confirmed verified (removing it prematurely can drop the property back to
+  "unverified").
 - `.github/workflows/deploy.yml` builds and deploys on push to `main` via
   `withastro/action`. Repo's GitHub Pages source must be set to "GitHub Actions" for
   it to take effect (Settings → Pages). The custom domain itself is configured in two
